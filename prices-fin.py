@@ -7,8 +7,9 @@ import random
 import math
 import string
 
-os.chdir('C:\\Users\\Orlando\\Documents\\GitHub\\tienda')
+os.chdir('C:\\Users\\rami298861\\Documents\\CIS 155 TIENDITA')
 
+#register function
 def register():
     print('Registering product')
     print('Please enter the product id')
@@ -36,33 +37,36 @@ def register():
                         # Logging the action in the log file
                         log_message = f"Product registered: {product} {id} {price} {time.strftime('%X %x %Z')}\n"
                         with open('log.txt', 'a') as log:
-                            log.write(log_message + '\n')  
+                            log.write(log_message + '\n') 
+                if answer =='2':
+                    print('Try again')
+                    log_message = f"Product doesn't equal the id: {id} {time.strftime('%X %x %Z')}\n"
+                    with open('log.txt', 'a') as log:
+                         log.write(log_message + '\n') 
 
 
-#create selling function, this function sells a product requesting just the id and it checks the price in the csv file, then asks for the amount of money the client is giving and it calculates the change and prints it
+
+#selling function, 
 def sell():
-    print('Selling product')
-    while True:
-        id = input('Please enter the product id: ')
-        with open('prices.csv', 'r') as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                if row[0] == id:
+      print('Selling product')
+      id = input('Please enter the product id: ')
+      with open('prices.csv', 'r') as csvfile:
+          reader = csv.reader(csvfile, delimiter=',')
+          for row in reader: 
+              if row[0] == id:
                     product = row[1]
                     price = row[2]
                     print('Product found')
                     print('Product name: ' + product)
                     print('Product id: ' + id)
                     print('Product price: ' + price)
-                    while True:
-                        answer = input('Is this correct? (1. Yes / 2. No): ')
-                        if answer == '1':
-                            while True:
-                                money = input('Please enter the amount of money the client is giving: ')
-                                try:
-                                    money = float(money)
-                                    break
-                                except ValueError:
+                    answer = input('Is this correct? (1. Yes / 2. No): ')
+                    if answer == '1':
+                            money = input('Please enter the amount of money the client is giving: ')
+                            try:
+                                money = float(money)
+                                break
+                            except ValueError:
                                     print('Invalid input. Please enter a valid number.')
                             change = money - float(price)
                             print('The change is ' + str(change))
@@ -88,4 +92,18 @@ if not os.path.exists('prices.csv'):
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['id', 'product', 'price'])
 
-sell()
+def main_menu():
+    print("Welcome to Prices")
+    print("Please Press")
+    print("1 for Registering a Product")
+    print("2 for Selling a Product")
+    print("3 to quit")
+    answer = input()
+    if answer == '1':
+        register()
+    if answer == '2':
+        sell()
+    if answer == '3':
+        quit()
+
+main_menu()
